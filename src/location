@@ -1,0 +1,18 @@
+#import colors
+
+function get_location (){
+    local pwd=`pwd | sed "s#$HOME#~#"`
+    local dirname=""
+
+    if [[ $pwd == "~" ]]; then
+        dirname=$_pwd
+    else
+        dirname=`dirname $pwd | sed -r "s/\/(.)[^\/]*/\/\1/g"`
+        if [[ $_dirname == "/" ]]; then
+            dirname=""
+        fi
+        dirname="$dirname/`basename $_pwd`"
+    fi
+
+    echo "${BLUE}${dirname}"
+}

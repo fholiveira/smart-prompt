@@ -1,0 +1,9 @@
+function get_symbol() {
+    local symbol="$"
+
+    if [[ $EUID -ne 0 ]]; then
+        symbol="#"            
+    fi
+
+    echo "$symbol"
+}

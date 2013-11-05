@@ -1,0 +1,57 @@
+#import colors
+
+function get_remote_status() {
+    local diverge_pattern="# Your branch and (.*) have diverged"
+    local remote_pattern="# Your branch is (.*) of"
+    local git_status=$1
+    local remote=''
+
+    if [[ ${git_status} =~ ${remote_pattern} ]]; then
+        if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
+            remote="↑"
+        else
+            remote="↓"
+        fi
+    elif [[ ${git_status} =~ ${diverge_pattern} ]]; then
+        remote="↕"
+    fi
+
+    echo "$remote"
+}
+
+function get_branch_name() {
+    local branch_pattern="^# On branch ([^${IFS}]*)"
+    local state="${RED}"
+    local git_status=$1
+    
+    if [[ ${git_status} =~ "working directory clean" ]]; then
+        state="${GREEN}"
+    elif [[ ${git_status} =~ "Changes to be committed" ]]; then
+        state="${YELLOW}"
+    fi
+        
+    if [[ ${git_status} =~ ${branch_pattern} ]]; then
+        branch=${BASH_REMATCH[1]}
+    fi
+
+    echo "${state}[${branch}]"
+}
+
+function get_git_status() {
+    git status 2> /dev/null
+}
+
+function is_git_repo() {
+    git branch > /dev/null 2>&1
+}
+
+function get_git_info() {
+    if is_git_repo ; then
+        local git_status=$(get_git_status)
+    
+        local branch=$(get_branch_name $git_status)
+        local remote=$(get_remote_status $git_status)
+        
+        echo "${branch}${remote}${COLOR_NONE} "
+    fi
+}

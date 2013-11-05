@@ -1,0 +1,12 @@
+#import colors
+
+function get_user_and_host() {
+    local user_and_host="${GREEN}\u@\h"
+
+    if [ -z $VIRTUAL_ENV ] ; then
+        local venv="${VIRTUAL_ENV##*/}"
+        user_and_host="${user_and_host} → ${venv}"
+    fi
+
+    echo "${user_and_host}"
+}

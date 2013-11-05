@@ -1,0 +1,17 @@
+#import colors
+#import git
+#import location
+#import user_and_host
+#import symbol
+
+function set_prompt () {
+    local git_info=$(get_git_info)
+    local location=$(get_location) 
+    local user_and_host=$(get_user_and_host)
+    local prompt_symbol=$(get_symbol)
+
+    PS1="${user_and_host} ${location} ${git_info}${prompt_symbol} "
+    RESET=${COLOR_NONE}
+}
+
+PROMPT_COMMAND=set_prompt
