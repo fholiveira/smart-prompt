@@ -1,0 +1,3 @@
+cd src/
+bso build prompt -o ../smart_prompt
+chmod +x ../smart_prompt
