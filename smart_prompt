@@ -58,7 +58,7 @@ function get_location (){
     local pwd=`pwd | sed "s#$HOME#~#"`
     local dirname=""
     if [[ $pwd == "~" ]]; then
-        dirname=$_pwd
+        dirname=$pwd
     else
         dirname=`dirname $pwd | sed -r "s/\/(.)[^\/]*/\/\1/g"`
         if [[ $_dirname == "/" ]]; then
