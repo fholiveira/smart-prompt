@@ -1,9 +1,9 @@
 function get_symbol() {
-    local symbol="$"
+    local symbol="#"
 
     if [[ $EUID -ne 0 ]]; then
-        symbol="#"            
+        symbol="$"            
     fi
 
-    echo "$symbol"
+    echo "${PINK}${symbol}${COLOR_NONE}"
 }

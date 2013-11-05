@@ -10,6 +10,7 @@ function set_prompt () {
     local user_and_host=$(get_user_and_host)
     local prompt_symbol=$(get_symbol)
 
-    PS1="${user_and_host} ${location} ${git_info}${prompt_symbol} "
-    RESET=${COLOR_NONE}
+    echo "${user_and_host} ${location} ${git_info}${prompt_symbol} "
 }
+
+set_prompt

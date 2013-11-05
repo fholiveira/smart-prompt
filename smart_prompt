@@ -25,6 +25,7 @@ function get_branch_name() {
     local branch_pattern="^# On branch ([^${IFS}]*)"
     local state="${RED}"
     local git_status=$1
+    local branch_name=""
     
     if [[ ${git_status} =~ "working directory clean" ]]; then
         state="${GREEN}"
@@ -33,9 +34,9 @@ function get_branch_name() {
     fi
         
     if [[ ${git_status} =~ ${branch_pattern} ]]; then
-        branch=${BASH_REMATCH[1]}
+        branch_name=${BASH_REMATCH[1]}
     fi
-    echo "${state}[${branch}]"
+    echo "${state}[${branch_name}]"
 }
 function get_git_status() {
     git status 2> /dev/null
@@ -47,8 +48,8 @@ function get_git_info() {
     if is_git_repo ; then
         local git_status=$(get_git_status)
     
-        local branch=$(get_branch_name $git_status)
-        local remote=$(get_remote_status $git_status)
+        local branch=$(get_branch_name "$git_status")
+        local remote=$(get_remote_status "$git_status")
         
         echo "${branch}${remote}${COLOR_NONE} "
     fi
@@ -63,30 +64,30 @@ function get_location (){
         if [[ $_dirname == "/" ]]; then
             dirname=""
         fi
-        dirname="$dirname/`basename $_pwd`"
+        dirname="$dirname/`basename $pwd`"
     fi
     echo "${BLUE}${dirname}"
 }
 function get_user_and_host() {
     local user_and_host="${GREEN}\u@\h"
-    if [ -z $VIRTUAL_ENV ] ; then
+    if [ ! -z $VIRTUAL_ENV ] ; then
         local venv="${VIRTUAL_ENV##*/}"
         user_and_host="${user_and_host} → ${venv}"
     fi
     echo "${user_and_host}"
 }
 function get_symbol() {
-    local symbol="$"
+    local symbol="#"
     if [[ $EUID -ne 0 ]]; then
-        symbol="#"            
+        symbol="$"            
     fi
-    echo "$symbol"
+    echo "${PINK}${symbol}${COLOR_NONE}"
 }
 function set_prompt () {
     local git_info=$(get_git_info)
     local location=$(get_location) 
     local user_and_host=$(get_user_and_host)
     local prompt_symbol=$(get_symbol)
-    PS1="${user_and_host} ${location} ${git_info}${prompt_symbol} "
-    RESET=${COLOR_NONE}
+    echo "${user_and_host} ${location} ${git_info}${prompt_symbol} "
 }
+set_prompt
