@@ -1,0 +1,93 @@
+       RED="\[\033[1;31m\]"
+    YELLOW="\[\033[1;33m\]"
+     GREEN="\[\033[1;32m\]"
+      BLUE="\[\033[1;34m\]"
+      PINK="\[\033[1;35m\]"
+      GRAY="\[\033[1;30m\]"
+COLOR_NONE="\[\e[0m\]"
+function get_remote_status() {
+    local diverge_pattern="# Your branch and (.*) have diverged"
+    local remote_pattern="# Your branch is (.*) of"
+    local git_status=$1
+    local remote=''
+    if [[ ${git_status} =~ ${remote_pattern} ]]; then
+        if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
+            remote="↑"
+        else
+            remote="↓"
+        fi
+    elif [[ ${git_status} =~ ${diverge_pattern} ]]; then
+        remote="↕"
+    fi
+    echo "$remote"
+}
+function get_branch_name() {
+    local branch_pattern="^# On branch ([^${IFS}]*)"
+    local state="${RED}"
+    local git_status=$1
+    
+    if [[ ${git_status} =~ "working directory clean" ]]; then
+        state="${GREEN}"
+    elif [[ ${git_status} =~ "Changes to be committed" ]]; then
+        state="${YELLOW}"
+    fi
+        
+    if [[ ${git_status} =~ ${branch_pattern} ]]; then
+        branch=${BASH_REMATCH[1]}
+    fi
+    echo "${state}[${branch}]"
+}
+function get_git_status() {
+    git status 2> /dev/null
+}
+function is_git_repo() {
+    git branch > /dev/null 2>&1
+}
+function get_git_info() {
+    if is_git_repo ; then
+        local git_status=$(get_git_status)
+    
+        local branch=$(get_branch_name $git_status)
+        local remote=$(get_remote_status $git_status)
+        
+        echo "${branch}${remote}${COLOR_NONE} "
+    fi
+}
+function get_location (){
+    local pwd=`pwd | sed "s#$HOME#~#"`
+    local dirname=""
+    if [[ $pwd == "~" ]]; then
+        dirname=$_pwd
+    else
+        dirname=`dirname $pwd | sed -r "s/\/(.)[^\/]*/\/\1/g"`
+        if [[ $_dirname == "/" ]]; then
+            dirname=""
+        fi
+        dirname="$dirname/`basename $_pwd`"
+    fi
+    echo "${BLUE}${dirname}"
+}
+function get_user_and_host() {
+    local user_and_host="${GREEN}\u@\h"
+    if [ -z $VIRTUAL_ENV ] ; then
+        local venv="${VIRTUAL_ENV##*/}"
+        user_and_host="${user_and_host} → ${venv}"
+    fi
+    echo "${user_and_host}"
+}
+function get_symbol() {
+    local symbol="$"
+    if [[ $EUID -ne 0 ]]; then
+        symbol="#"            
+    fi
+    echo "$symbol"
+}
+function set_prompt () {
+    local git_info=$(get_git_info)
+    local location=$(get_location) 
+    local user_and_host=$(get_user_and_host)
+    local prompt_symbol=$(get_symbol)
+    PS1="${user_and_host} ${location} ${git_info}${prompt_symbol} "
+    RESET=${COLOR_NONE}
+}
+PROMPT_COMMAND=set_prompt
