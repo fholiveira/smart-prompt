@@ -90,4 +90,3 @@ function set_prompt () {
     PS1="${user_and_host} ${location} ${git_info}${prompt_symbol} "
     RESET=${COLOR_NONE}
 }
-PROMPT_COMMAND=set_prompt
