@@ -21,7 +21,6 @@ Bash script que cria um prompt mais esperto. Ele informa:
     chmod +x ~/bin/smart_prompt
     ```
 4. No arquivo "~/.bashrc" adicione as seguintes linhas:
-
     ```bash
     function set_ps1() {
         PS1="$(smart_prompt)"
