@@ -1,3 +1,5 @@
+#import colors
+
 function get_symbol() {
     local symbol="#"
 
