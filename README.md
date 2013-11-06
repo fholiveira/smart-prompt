@@ -33,7 +33,3 @@ Bash script que cria um prompt mais esperto. Ele informa:
 ### Editando o código fonte
 
 Para editar o código fonte você vai precisar instalar o *[Bash Script Organizer](https://github.com/fholiveira/bso)*.
-
-
-
-Pronto!
