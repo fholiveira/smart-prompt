@@ -25,19 +25,35 @@ function get_remote_status() {
 function get_branch_name() {
     git branch | sed "s/^\* //"
 }
-function get_branch_info() {
-    local state="${LIGHT_BLUE}"
+function show_git_status() {
     local git_status=$1
-    local branch_name=$(get_branch_name)
-    
-    if [[ ${git_status} =~ "Changes not staged for commit" ]]; then
-        state="${RED}"
-    elif [[ ${git_status} =~ "working directory clean" ]]; then
-        state="${GREEN}"
-    elif [[ ${git_status} =~ "Changes to be committed" ]]; then
-        state="${YELLOW}"
+    local state="${LIGHT_BLUE}"
+        
+    local staged=$(echo "$git_status" | grep -c "^[A-Z] ")
+    local modified=$(echo "$git_status" | grep -c "^ [A-Z]")
+    local untracked=$(echo "$git_status" | grep -c "^??")
+    local files_status="$staged $modified $untracked"
+    if [[ $files_status == "0 0 0" ]]; then
+        echo "${GREEN}[${branch_name}]"
+    else
+        if [[ $modified != 0 ]]; then
+            state="${RED}"
+        elif [[ $staged != 0 ]]; then
+            state="${YELLOW}"
+        fi
+        echo "${state}[${branch_name} $files_status]"
     fi
-    echo "${state}[${branch_name}]"
+}
+function get_branch_info() {
+    local git_status=$(git status --porcelain)
+    local branch_name=$(get_branch_name)
+    local conflicts=$(echo "$git_status" | grep -c "^[A-Z][A-Z]")
+    
+    if [[ $conflicts == 0 ]] ; then
+        show_git_status "$git_status"
+    else
+        echo "${RED}[${branch_name} !$conflicts]"
+    fi
 }
 function get_git_status() {
     git status 2> /dev/null
