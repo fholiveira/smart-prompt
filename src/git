@@ -21,11 +21,13 @@ function get_remote_status() {
 
 function get_branch_name() {
     local branch_pattern="^# On branch ([^${IFS}]*)"
-    local state="${RED}"
+    local state="${LIGHT_BLUE}"
     local git_status=$1
     local branch_name=""
     
-    if [[ ${git_status} =~ "working directory clean" ]]; then
+    if [[ ${git_status} =~ "Changes not staged for commit" ]]; then
+        state="${RED}"
+    elif [[ ${git_status} =~ "working directory clean" ]]; then
         state="${GREEN}"
     elif [[ ${git_status} =~ "Changes to be committed" ]]; then
         state="${YELLOW}"
