@@ -20,10 +20,13 @@ function get_remote_status() {
 }
 
 function get_branch_name() {
-    local branch_pattern="^# On branch ([^${IFS}]*)"
+    git branch | sed "s/^\* //"
+}
+
+function get_branch_info() {
     local state="${LIGHT_BLUE}"
     local git_status=$1
-    local branch_name=""
+    local branch_name=$(get_branch_name)
     
     if [[ ${git_status} =~ "Changes not staged for commit" ]]; then
         state="${RED}"
@@ -31,10 +34,6 @@ function get_branch_name() {
         state="${GREEN}"
     elif [[ ${git_status} =~ "Changes to be committed" ]]; then
         state="${YELLOW}"
-    fi
-        
-    if [[ ${git_status} =~ ${branch_pattern} ]]; then
-        branch_name=${BASH_REMATCH[1]}
     fi
 
     echo "${state}[${branch_name}]"
@@ -52,7 +51,7 @@ function get_git_info() {
     if is_git_repo ; then
         local git_status=$(get_git_status)
     
-        local branch=$(get_branch_name "$git_status")
+        local branch=$(get_branch_info "$git_status")
         local remote=$(get_remote_status "$git_status")
         
         echo "${branch}${remote}${COLOR_NONE} "
