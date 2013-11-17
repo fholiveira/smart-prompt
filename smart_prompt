@@ -23,7 +23,7 @@ function get_remote_status() {
     echo "$remote"
 }
 function get_branch_name() {
-    git branch | sed "s/^\* //"
+    git branch | grep "^\*" | sed "s/^\* //"
 }
 function show_git_status() {
     local git_status=$1
