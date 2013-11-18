@@ -1,26 +1,24 @@
 #import colors
 
 function get_remote_status() {
-    local diverge_pattern="# Your branch and (.*) have diverged"
-    local remote_pattern="# Your branch is (.*) of"
+    local ahead="ahead"
+    local behind="behind"
     local git_status=$1
     local remote=''
 
-    if [[ ${git_status} =~ ${remote_pattern} ]]; then
-        if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
-            remote="↑"
-        else
-            remote="↓"
-        fi
-    elif [[ ${git_status} =~ ${diverge_pattern} ]]; then
-        remote="↕"
+    if [[ ${git_status} =~ ${ahead} && ${git_status} =~ ${behind} ]]; then
+        remote="↕"        
+    elif [[ ${git_status} =~ ${ahead} ]] ; then
+        remote="↑"
+    elif [[ ${git_status} =~ ${behind} ]] ; then
+        remote="↓"
     fi
 
     echo "$remote"
 }
 
 function get_branch_name() {
-    git branch | grep "^\*" | sed "s/^\* //"
+    echo "$1" | grep ^\* | cut -d " " -f2
 }
 
 function show_git_status() {
@@ -33,12 +31,12 @@ function show_git_status() {
 
     local files_status="$staged $modified $untracked"
 
-    if [[ $files_status == "0 0 0" ]]; then
+    if [[ $files_status == "0 0 0" ]] ; then
         echo "${GREEN}[${branch_name}]"
     else
-        if [[ $modified != 0 ]]; then
+        if [[ $modified != 0 ]] ; then
             state="${RED}"
-        elif [[ $staged != 0 ]]; then
+        elif [[ $staged != 0 ]] ; then
             state="${YELLOW}"
         fi
 
@@ -48,7 +46,7 @@ function show_git_status() {
 
 function get_branch_info() {
     local git_status=$(git status --porcelain)
-    local branch_name=$(get_branch_name)
+    local branch_name=$(get_branch_name "$1")
 
     local conflicts=$(echo "$git_status" | grep -c "^[A-Z][A-Z]")
     
@@ -59,20 +57,16 @@ function get_branch_info() {
     fi
 }
 
-function get_git_status() {
-    git status 2> /dev/null
-}
-
-function is_git_repo() {
-    git branch > /dev/null 2>&1
+function get_branch_status() {
+    git branch -v | grep "^\*" 2> /dev/null
 }
 
 function get_git_info() {
-    if is_git_repo ; then
-        local git_status=$(get_git_status)
+    local branch=$(get_branch_status)
     
-        local branch=$(get_branch_info "$git_status")
-        local remote=$(get_remote_status "$git_status")
+    if [[ ${branch} =~ ^\* ]] ; then   
+        local branch=$(get_branch_info "$branch")
+        local remote=$(get_remote_status "$branch")
         
         echo "${branch}${remote}${COLOR_NONE} "
     fi
