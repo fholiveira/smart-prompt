@@ -56,7 +56,7 @@ function get_branch_info() {
 }
 
 function get_branch_status() {
-    git branch -v | grep "^\*" 2> /dev/null
+    (git branch -v | grep "^\*") 2>&1
 }
 
 function get_git_info() {
