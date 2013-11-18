@@ -1,16 +1,14 @@
 #import colors
 
 function get_remote_status() {
-    local ahead="ahead"
-    local behind="behind"
     local git_status=$1
-    local remote=''
+    local remote=""
 
-    if [[ ${git_status} =~ ${ahead} && ${git_status} =~ ${behind} ]]; then
+    if [[ "$git_status" =~ .*ahead.* && "$git_status" =~ .*behind.* ]] ; then
         remote="↕"        
-    elif [[ ${git_status} =~ ${ahead} ]] ; then
+    elif [[ "$git_status" =~ .*ahead.* ]] ; then
         remote="↑"
-    elif [[ ${git_status} =~ ${behind} ]] ; then
+    elif [[ "$git_status" =~ .*behind.* ]] ; then
         remote="↓"
     fi
 
@@ -65,9 +63,9 @@ function get_git_info() {
     local branch=$(get_branch_status)
     
     if [[ ${branch} =~ ^\* ]] ; then   
-        local branch=$(get_branch_info "$branch")
         local remote=$(get_remote_status "$branch")
+        local branch_name=$(get_branch_info "$branch")
         
-        echo "${branch}${remote}${COLOR_NONE} "
+        echo "${branch_name}${remote}${COLOR_NONE} "
     fi
 }
