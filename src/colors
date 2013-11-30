@@ -5,4 +5,4 @@
       PINK="\[\033[1;35m\]"
 LIGHT_BLUE="\[\033[1;36m\]"
       GRAY="\[\033[1;30m\]"
-COLOR_NONE="\[\e[0m\]"
+COLOR_NONE="\[\033[0m\]"
