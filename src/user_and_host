@@ -5,7 +5,7 @@ function get_user_and_host() {
 
     if [ ! -z $VIRTUAL_ENV ] ; then
         local venv="${VIRTUAL_ENV##*/}"
-        user_and_host="${user_and_host} → ${venv}"
+        user_and_host="${user_and_host} → ${venv#"."}"
     fi
 
     echo "${user_and_host}"

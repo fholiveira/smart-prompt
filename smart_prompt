@@ -5,7 +5,7 @@
       PINK="\[\033[1;35m\]"
 LIGHT_BLUE="\[\033[1;36m\]"
       GRAY="\[\033[1;30m\]"
-COLOR_NONE="\[\e[0m\]"
+COLOR_NONE="\[\033[0m\]"
 function get_remote_status() {
     local git_status=$1
     local remote=""
@@ -52,7 +52,7 @@ function get_branch_info() {
     fi
 }
 function get_branch_status() {
-    git branch -v | grep "^\*" 2> /dev/null
+    (git branch -v | grep "^\*") 2>&1
 }
 function get_git_info() {
     local branch=$(get_branch_status)
@@ -82,7 +82,7 @@ function get_user_and_host() {
     local user_and_host="${GREEN}\u@\h"
     if [ ! -z $VIRTUAL_ENV ] ; then
         local venv="${VIRTUAL_ENV##*/}"
-        user_and_host="${user_and_host} → ${venv}"
+        user_and_host="${user_and_host} → ${venv#"."}"
     fi
     echo "${user_and_host}"
 }
