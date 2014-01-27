@@ -14,17 +14,17 @@ Bash script que cria um prompt mais esperto. Ele informa:
 
 ### Para usar
 
-1. Baixe o arquivo [smart_prompt](smart_prompt) e coloque-o na pasta "~/bin/".
+1. Baixe o arquivo [smart-prompt](smart-prompt) e coloque-o na pasta "~/bin/".
 2. Certifique-se que a pasta "~/bin/" está no seu PATH 
 3. Dê permissão de execução ao arquivo 
 
     ```bash
-    chmod +x ~/bin/smart_prompt
+    chmod +x ~/bin/smart-prompt
     ```
 4. No arquivo "~/.bashrc" adicione as seguintes linhas:
     ```bash
     function set_ps1() {
-        PS1="$(smart_prompt)"
+        PS1="$(smart-prompt)"
     }
 
     PROMPT_COMMAND=set_ps1
