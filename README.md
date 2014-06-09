@@ -14,8 +14,8 @@ Bash script que cria um prompt mais esperto. Ele informa:
 
 ### Para usar
 
-1. Baixe o arquivo [smart-prompt](smart-prompt) e coloque-o na pasta "~/bin/".
-2. Certifique-se que a pasta "~/bin/" está no seu PATH 
+1. Baixe o arquivo [smart-prompt](smart-prompt) e coloque-o na pasta "~/.bin/".
+2. Certifique-se que a pasta "~/.bin/" está no seu PATH 
 3. Dê permissão de execução ao arquivo 
 
     ```bash
