@@ -70,10 +70,10 @@ function get_location (){
     if [[ $pwd == "~" ]] || [[ $pwd == "/" ]] ; then
         dirname=$pwd
     else
-        dirname=`dirname $pwd | sed -r "s/\/(.)[^\/]*/\/\1/g"`
-        test $dirname == "/" && dirname=""
-        
-	dirname="$dirname/`basename $pwd`"
+        dirname=`dirname "$pwd" | sed -r "s/\/(.)[^\/]*/\/\1/g"`
+        test "$dirname" == "/" && dirname=""
+       	
+	dirname="$dirname/`basename "$pwd"`"
     fi
     echo "${BLUE}${dirname}"
 }
