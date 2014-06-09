@@ -19,7 +19,7 @@ Bash script que cria um prompt mais esperto. Ele informa:
 3. Dê permissão de execução ao arquivo 
 
     ```bash
-    chmod +x ~/bin/smart-prompt
+    chmod +x ~/.bin/smart-prompt
     ```
 4. No arquivo "~/.bashrc" adicione as seguintes linhas:
 
