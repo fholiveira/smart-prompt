@@ -9,11 +9,11 @@ COLOR_NONE="\[\033[0m\]"
 function get_remote_status() {
     local git_status=$1
     local remote=""
-    if [[ "$git_status" =~ .*ahead.* && "$git_status" =~ .*behind.* ]] ; then
+    if [[ "$git_status" =~ "ahead" && "$git_status" =~ "behind" ]] ; then
         remote="↕"        
-    elif [[ "$git_status" =~ .*ahead.* ]] ; then
+    elif [[ "$git_status" =~ "ahead" ]] ; then
         remote="↑"
-    elif [[ "$git_status" =~ .*behind.* ]] ; then
+    elif [[ "$git_status" =~ "behind" ]] ; then
         remote="↓"
     fi
     echo "$remote"
@@ -32,9 +32,9 @@ function show_git_status() {
     if [[ $files_status == "0 0 0" ]] ; then
         echo "${GREEN}[${branch_name}]"
     else
-        if [[ $modified != 0 ]] ; then
+        if [ $modified -ne 0 ] ; then
             state="${RED}"
-        elif [[ $staged != 0 ]] ; then
+        elif [ $staged -ne 0 ] ; then
             state="${YELLOW}"
         fi
         echo "${state}[${branch_name} $files_status]"
