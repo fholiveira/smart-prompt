@@ -1,5 +1,7 @@
 #import colors
 
+NEW_REPO="??"
+
 function get_remote_status() {
     local git_status=$1
     local remote=""
@@ -16,7 +18,11 @@ function get_remote_status() {
 }
 
 function get_branch_name() {
-    echo "$1" | grep ^\* | cut -d " " -f2
+    if [[ "$1" == $NEW_REPO ]] ; then
+        git status | grep "^On branch" | cut -d ' ' -f 3
+    else
+        echo "$1" | grep ^\* | cut -d " " -f2
+    fi
 }
 
 function show_git_status() {
@@ -59,6 +65,10 @@ function get_branch_status() {
     (git branch -v | grep "^\*") 2>&1
 }
 
+function is_inside_git_repo() {
+    git rev-parse --is-inside-work-tree 2> /dev/null
+}
+
 function get_git_info() {
     local branch=$(get_branch_status)
     
@@ -67,5 +77,8 @@ function get_git_info() {
         local branch_name=$(get_branch_info "$branch")
         
         echo "${branch_name}${remote}${COLOR_NONE} "
+    elif [[ $(is_inside_git_repo) == "true" ]] ; then
+        local branch_name=$(get_branch_info $NEW_REPO)
+        echo "${branch_name}${COLOR_NONE} "
     fi
 }
