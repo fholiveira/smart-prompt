@@ -20,8 +20,11 @@ function get_remote_status() {
     echo "$remote"
 }
 function get_branch_name() {
-    if [[ "$1" == $NEW_REPO ]] ; then
+    if [[ $1 == $NEW_REPO ]] ; then
         git status | grep "^On branch" | cut -d ' ' -f 3
+    elif [[ $1 =~ (no branch, rebasing .*) ]] ; then
+        local name=$(echo $1 | grep -Po "(?<=no branch, ).*(?=\))")
+        echo "($name)"
     else
         echo "$1" | grep ^\* | cut -d " " -f2
     fi
