@@ -24,21 +24,19 @@ Bash script que cria um prompt mais esperto. Ele informa:
 
 ### Para usar
 
-1. Certifique-se que a pasta "~/.bin/" está no seu PATH 
+1. Verifique se que a pasta "~/.bin/" está no seu PATH com o comando
 
-  * Se pasta estiver no path ela aparecerá destacada ao rodar o comando
-    
-    ```bash
-    echo $PATH | grep -e "$HOME/.bin" -e "~/.bin"
-    ```
-  * Se ela não estiver no path 
+  ```bash
+  echo $PATH | grep -e "$HOME/.bin" -e "~/.bin"
+  ```
+  * Se ela não estiver no PATH
     1. Crie-a com o comando
-        
+
       ```bash
-      mkdir -p ~/.bin 
+      mkdir -p ~/.bin
       ```
     2. Adicione a seguinte linha ao começo do arquivo "~/.bashrc"
-        
+
       ```bash
       export PATH=$PATH:~/.bin    #User scripts
       ```
@@ -57,4 +55,3 @@ Bash script que cria um prompt mais esperto. Ele informa:
 ### Editando o código fonte
 
 Para editar o código fonte você vai precisar instalar o *[Bash Script Organizer](https://github.com/fholiveira/bso)*.
-
